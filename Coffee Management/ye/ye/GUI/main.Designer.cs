@@ -284,7 +284,7 @@
             this.btn_search.FlatAppearance.BorderSize = 0;
             this.btn_search.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_search.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.btn_search.Location = new System.Drawing.Point(351, 40);
+            this.btn_search.Location = new System.Drawing.Point(334, 40);
             this.btn_search.Name = "btn_search";
             this.btn_search.Size = new System.Drawing.Size(74, 31);
             this.btn_search.TabIndex = 30;
