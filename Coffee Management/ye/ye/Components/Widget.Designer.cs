@@ -30,7 +30,6 @@ namespace ye
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.img_pr = new System.Windows.Forms.PictureBox();
             this.button_add_to_cart = new System.Windows.Forms.Button();
             this.label_count = new System.Windows.Forms.Label();
             this.button_minus = new System.Windows.Forms.Button();
@@ -38,6 +37,7 @@ namespace ye
             this.tb_details = new System.Windows.Forms.TextBox();
             this.price_pr = new System.Windows.Forms.Label();
             this.name_pr = new System.Windows.Forms.Label();
+            this.img_pr = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.img_pr)).BeginInit();
             this.SuspendLayout();
@@ -55,19 +55,10 @@ namespace ye
             this.panel1.Controls.Add(this.name_pr);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Location = new System.Drawing.Point(5, 5);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(310, 266);
+            this.panel1.Size = new System.Drawing.Size(290, 293);
             this.panel1.TabIndex = 1;
-            // 
-            // img_pr
-            // 
-            this.img_pr.Location = new System.Drawing.Point(4, 4);
-            this.img_pr.Name = "img_pr";
-            this.img_pr.Size = new System.Drawing.Size(132, 173);
-            this.img_pr.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.img_pr.TabIndex = 6;
-            this.img_pr.TabStop = false;
             // 
             // button_add_to_cart
             // 
@@ -80,7 +71,7 @@ namespace ye
             this.button_add_to_cart.TabIndex = 5;
             this.button_add_to_cart.Text = "Thêm Vào Giỏ Hàng";
             this.button_add_to_cart.UseVisualStyleBackColor = true;
-            this.button_add_to_cart.Click += new System.EventHandler(this.button_add_to_cart_Click);
+            this.button_add_to_cart.Click += new System.EventHandler(this.btn_add_to_cart_Click);
             // 
             // label_count
             // 
@@ -102,11 +93,11 @@ namespace ye
             this.button_minus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_minus.Font = new System.Drawing.Font("Stencil", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_minus.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button_minus.Location = new System.Drawing.Point(23, 222);
+            this.button_minus.Location = new System.Drawing.Point(23, 223);
             this.button_minus.Margin = new System.Windows.Forms.Padding(0);
             this.button_minus.Name = "button_minus";
             this.button_minus.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.button_minus.Size = new System.Drawing.Size(33, 33);
+            this.button_minus.Size = new System.Drawing.Size(29, 29);
             this.button_minus.TabIndex = 3;
             this.button_minus.Text = "-";
             this.button_minus.UseVisualStyleBackColor = true;
@@ -122,11 +113,11 @@ namespace ye
             this.button_add.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_add.Font = new System.Drawing.Font("Stencil", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_add.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button_add.Location = new System.Drawing.Point(77, 222);
+            this.button_add.Location = new System.Drawing.Point(77, 223);
             this.button_add.Margin = new System.Windows.Forms.Padding(0);
             this.button_add.Name = "button_add";
             this.button_add.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.button_add.Size = new System.Drawing.Size(33, 33);
+            this.button_add.Size = new System.Drawing.Size(29, 29);
             this.button_add.TabIndex = 3;
             this.button_add.Text = "+";
             this.button_add.UseVisualStyleBackColor = true;
@@ -139,7 +130,7 @@ namespace ye
             this.tb_details.Location = new System.Drawing.Point(146, 86);
             this.tb_details.Multiline = true;
             this.tb_details.Name = "tb_details";
-            this.tb_details.Size = new System.Drawing.Size(161, 102);
+            this.tb_details.Size = new System.Drawing.Size(149, 102);
             this.tb_details.TabIndex = 2;
             // 
             // price_pr
@@ -156,21 +147,30 @@ namespace ye
             // 
             this.name_pr.AllowDrop = true;
             this.name_pr.Location = new System.Drawing.Point(142, 19);
+            this.name_pr.Margin = new System.Windows.Forms.Padding(3, 0, 5, 5);
             this.name_pr.Name = "name_pr";
-            this.name_pr.Size = new System.Drawing.Size(165, 64);
+            this.name_pr.Size = new System.Drawing.Size(153, 64);
             this.name_pr.TabIndex = 0;
             this.name_pr.Text = "label1";
+            // 
+            // img_pr
+            // 
+            this.img_pr.Location = new System.Drawing.Point(4, 4);
+            this.img_pr.Name = "img_pr";
+            this.img_pr.Size = new System.Drawing.Size(132, 173);
+            this.img_pr.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.img_pr.TabIndex = 6;
+            this.img_pr.TabStop = false;
             // 
             // Widget
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(15, 7, 15, 7);
+            this.Margin = new System.Windows.Forms.Padding(35, 0, 5, 10);
             this.Name = "Widget";
-            this.Padding = new System.Windows.Forms.Padding(3);
-            this.Size = new System.Drawing.Size(316, 272);
-            this.Load += new System.EventHandler(this.Widget_Load);
+            this.Padding = new System.Windows.Forms.Padding(5);
+            this.Size = new System.Drawing.Size(300, 303);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.img_pr)).EndInit();

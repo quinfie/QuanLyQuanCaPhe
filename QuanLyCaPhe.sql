@@ -1,43 +1,5 @@
-﻿create database QuanLyCaPhe ON PRIMARY
-(
-	Name = DB_PRIMARY,
-	Filename = N'D:\THHQTCSDL\QuanLyQuanCaPhe\DB_primary.mdf',
-	Size = 3Mb,
-	Maxsize = 10Mb,
-	Filegrowth = 10%
-),
-(
-	Name = DB_SECOND1_1,
-	Filename = N'D:\THHQTCSDL\QuanLyQuanCaPhe\DB_second1_1.ndf',
-	Size = 3Mb,
-	Maxsize = 5Mb,
-	Filegrowth = 10%
-),
-(
-	Name = DB_SECOND1_2,
-	Filename = N'D:\THHQTCSDL\QuanLyQuanCaPhe\DB_second1_2.ndf',
-	Size = 3Mb,
-	Maxsize = 5Mb,
-	Filegrowth = 10%
-),
-(
-	Name = DB_SECOND1_3,
-	Filename = N'D:\THHQTCSDL\QuanLyQuanCaPhe\DB_second1_3.ndf',
-	Size = 3Mb,
-	Maxsize = 5Mb,
-	Filegrowth = 5%
-)
-LOG ON
-(
-	Name = DB_Log,
-	Filename = N'D:\THHQTCSDL\QuanLyQuanCaPhe\DB_Log.ldf',
-	Size = 3Mb,
-	Maxsize = 5Mb,
-	Filegrowth = 5%
-)
-use QuanLyCaPhe
-
-
+﻿create database Sugong_Coffee
+use Sugong_Coffee
 -----------------------------------------------------------CREATE TABLE---------------------------------------------------------------------
 CREATE TABLE TAI_KHOAN
 (
@@ -59,8 +21,6 @@ CREATE TABLE NGUOI_DUNG
 	DIA_CHI NVARCHAR(100),
 	SDT VARCHAR(10)
 )
-ALTER TABLE TAI_KHOAN
-ADD CONSTRAINT FK_MND FOREIGN KEY (MA_NGUOI_DUNG) REFERENCES NGUOI_DUNG(MA_NGUOI_DUNG)
 -------------------------------------------------------------------------------------------
 CREATE TABLE KHACH_HANG
 (
@@ -76,15 +36,6 @@ CREATE TABLE BAN
 (
 	MA_BAN INT PRIMARY KEY,
 	TINH_TRANG_BAN NVARCHAR(100) NOT NULL
-)
--------------------------------------------------------------------------------------------
-CREATE TABLE CTDATBAN
-(
-	MA_DAT_BAN INT PRIMARY KEY,
-	MA_BAN INT,
-	MA_MON INT,
-	CONSTRAINT FK_CTDATBAN_THUC_DON FOREIGN KEY(MA_MON) REFERENCES THUC_DON (MA_MON),
-	CONSTRAINT FK_CTDATBAN_BAN FOREIGN KEY(MA_BAN) REFERENCES BAN(MA_BAN)
 )
 -------------------------------------------------------------------------------------------
 CREATE TABLE DANH_MUC
@@ -123,7 +74,7 @@ CREATE TABLE CHI_TIET_HOA_DON
 (
 	MA_HOA_DON INT NOT NULL,
 	MA_MON INT NOT NULL,
-	COUNT INT NOT NULL DEFAULT 0,
+	SO_LUONG INT NOT NULL DEFAULT 0,
 	PRIMARY KEY (MA_HOA_DON, MA_MON),
 	FOREIGN KEY (MA_HOA_DON) REFERENCES HOA_DON(MA_HOA_DON),
 	FOREIGN KEY (MA_MON) REFERENCES THUC_DON(MA_MON)
@@ -208,7 +159,7 @@ INSERT INTO THUC_DON VALUES
 ('50', 'Turmeric Lemon Coconut Donuts',NULL, 30000, 'Turmeric Lemon Coconut Donuts.png', '6'),
 ('51', 'Vegan Blueberry Donuts',NULL, 30000, 'Vegan Blueberry Donuts.png', '6'),
 ('52', 'Vegan Chai Latte Donuts With Maple Glaze',NULL, 30000, 'Vegan chai latte donuts with maple glaze.png', '6')
--------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------- ( Chưa insert và xử lý )
 INSERT INTO BAN VALUES
 (1,N'Trống'),
 (2,N'Trống'),
@@ -260,34 +211,72 @@ INSERT INTO CHI_TIET_HOA_DON (MA_HOA_DON, MA_MON, COUNT) VALUES
 (8, 8, 1),
 (9, 9, 3),
 (10, 10, 2);
-
--------------------------------------------------------------------------------------------
-------------------------Xử Lý Thực Đơn-------------------------
-----Tạo stored procedure
---Lấy thông tin menu
-CREATE PROCEDURE GetThucDonData
+--------------------------------------------------------CONSTRAINT TABLE--------------------------------------------------------------
+ALTER TABLE TAI_KHOAN
+ADD CONSTRAINT FK_MND FOREIGN KEY (MA_NGUOI_DUNG) REFERENCES NGUOI_DUNG(MA_NGUOI_DUNG)
+ALTER TABLE THUC_DON
+ADD CONSTRAINT CHK_GIA_POSITIVE
+CHECK (GIA >= 0);
+ALTER TABLE HOA_DON
+ADD CONSTRAINT DF_TINH_TRANG_HD
+DEFAULT 'Chưa thanh toán' FOR TINH_TRANG_HD;
+ALTER TABLE BAN
+ADD CONSTRAINT DF_TINH_TRANG_BAN
+DEFAULT 'Trống' FOR TINH_TRANG_BAN;
+----------------------------------------------------------------------------
+--Cập nhật số lượng của món ăn trong thực đơn sau mỗi lần có sự thay đổi.
+CREATE TRIGGER TR_CHI_TIET_HOA_DON_COUNT
+ON CHI_TIET_HOA_DON
+AFTER INSERT, UPDATE
 AS
 BEGIN
-    SELECT *
-    FROM THUC_DON;
+    UPDATE cthd
+    SET SO_LUONG = cthd.SO_LUONG + i.SO_LUONG
+    FROM CHI_TIET_HOA_DON cthd
+    INNER JOIN inserted i ON cthd.MA_MON = i.MA_MON AND cthd.MA_HOA_DON = i.MA_HOA_DON
 END;
---Cập nhật thực đơn
-CREATE PROCEDURE UpdateThucDon
-    @MaMon INT,
-    @TenMon NVARCHAR(50),
-    @ThanhPhan NVARCHAR(100),
-    @Gia INT,
-    @HinhAnh VARCHAR(100),
-    @MaDanhMuc INT
+----------------------------------------------------------------------------
+--Cập nhật trạng thái của bàn sau khi có sự thay đổi.
+CREATE TRIGGER TR_BAN_TINH_TRANG
+ON BAN
+AFTER INSERT, UPDATE
 AS
 BEGIN
-    UPDATE THUC_DON
-    SET
-        TEN_MON = @TenMon,
-        THANH_PHAN = @ThanhPhan,
-        GIA = @Gia,
-        HINH_ANH = @HinhAnh,
-        MA_DANH_MUC = @MaDanhMuc
-    WHERE
-        MA_MON = @MaMon;
-END
+    UPDATE BAN
+    SET TINH_TRANG_BAN = 'Có người đặt'
+    FROM BAN b
+    INNER JOIN inserted i ON b.MA_BAN = i.MA_BAN
+END;
+----------------------------------------------------------------------------
+-- trigger tự động tính toán và cập nhật trường "THANH_TIEN" trong bảng HOA_DON
+CREATE TRIGGER tr_Calculate_ThanhTien
+ON CHI_TIET_HOA_DON
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Update THANH_TIEN for affected HOA_DON records after INSERT or UPDATE in CHI_TIET_HOA_DON
+    UPDATE HOA_DON
+    SET THANH_TIEN = (
+        SELECT SUM(ISNULL(TD.GIA, 0) * ISNULL(CTHD.SO_LUONG, 0))
+        FROM CHI_TIET_HOA_DON CTHD
+        JOIN THUC_DON TD ON CTHD.MA_MON = TD.MA_MON
+        WHERE CTHD.MA_HOA_DON = HOA_DON.MA_HOA_DON
+    )
+    WHERE HOA_DON.MA_HOA_DON IN (SELECT DISTINCT MA_HOA_DON FROM inserted);
+
+    -- Handle DELETE in CHI_TIET_HOA_DON
+    UPDATE HOA_DON
+    SET THANH_TIEN = (
+        SELECT SUM(ISNULL(TD.GIA, 0) * ISNULL(CTHD.SO_LUONG, 0))
+        FROM CHI_TIET_HOA_DON CTHD
+        JOIN THUC_DON TD ON CTHD.MA_MON = TD.MA_MON
+        WHERE CTHD.MA_HOA_DON = HOA_DON.MA_HOA_DON
+    )
+    WHERE HOA_DON.MA_HOA_DON IN (SELECT DISTINCT MA_HOA_DON FROM deleted);
+END;
+
+
+
+

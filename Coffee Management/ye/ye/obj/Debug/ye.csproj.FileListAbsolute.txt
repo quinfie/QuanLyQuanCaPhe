@@ -31,3 +31,17 @@ C:\Users\Thanh Nguyen\Desktop\Sugong_Coffee\Coffee Management\ye\ye\obj\Debug\ye
 C:\Users\Thanh Nguyen\Desktop\Sugong_Coffee\Coffee Management\ye\ye\ye.exe
 C:\Users\Thanh Nguyen\Desktop\Sugong_Coffee\Coffee Management\ye\ye\ye.pdb
 C:\Users\Thanh Nguyen\Desktop\Sugong_Coffee\Coffee Management\ye\ye\obj\Debug\ye.csproj.AssemblyReference.cache
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.Login.resources
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.main.resources
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.Model.Form1.resources
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.Model.Form2.resources
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.Properties.Resources.resources
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.Widget.resources
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.csproj.GenerateResource.cache
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.csproj.CoreCompileInputs.cache
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\ye.exe.config
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.exe
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.pdb
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\ye.exe
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\ye.pdb
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.csproj.AssemblyReference.cache

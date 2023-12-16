@@ -16,6 +16,15 @@ namespace ye
 
     public partial class Widget : UserControl
     {
+        public class AddToCartEventArgs : EventArgs
+        {
+            public Payment MonAn { get; }
+
+            public AddToCartEventArgs(Payment monAn)
+            {
+                MonAn = monAn;
+            }
+        }
         public Product ProductInfo { get; private set; }
         public delegate void MonAnEventHandler(Payment monAn);
         public event MonAnEventHandler Wdg_MonAnAdded;
@@ -77,40 +86,19 @@ namespace ye
 
         }
 
-        private void button_add_to_cart_Click(object sender, EventArgs e)
+        public event EventHandler<AddToCartEventArgs> AddToCartClicked;
+        private void btn_add_to_cart_Click(object sender, EventArgs e)
         {
-            Product selectedProduct = GetSelectedProduct();
-            Add_To_Cart(selectedProduct);
-
-        }
-
-
-        public void Add_To_Cart(Product selectedProduct)
-        {
-            if (selectedProduct != null)
+            // Lấy thông tin đối tượng món ăn từ widget
+            Payment monAn = new Payment
             {
-                try
-                {
-                    int giaMon = selectedProduct.GIA;
-                    int soluong = Convert.ToInt32(label_count.Text);
-                    Payment monAn = new Payment { TEN_MON = selectedProduct.TEN_MON, GIA = giaMon, SO_LUONG = soluong };
-                    OnWdg_MonAnAdded(monAn);
-                    MessageBox.Show("Thêm Món Thành Công");
-                }
-                catch (FormatException ex)
-                {
-                    MessageBox.Show($"Lỗi: {ex.Message}");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Không có thông tin sản phẩm để thêm vào giỏ hàng.");
-            }
-        }
+                TEN_MON = ProductInfo.TEN_MON,
+                GIA = ProductInfo.GIA,
+                SO_LUONG = current_value
+            };
+            AddToCartClicked?.Invoke(this, new AddToCartEventArgs(monAn));
+            label_count.Text = "0";
 
-        protected virtual void OnWdg_MonAnAdded(Payment monAn)
-        {
-            Wdg_MonAnAdded?.Invoke(monAn);
         }
     }
 }
