@@ -18,22 +18,40 @@ namespace ye
     {
         Menu_Coffee menu = new Menu_Coffee();
         Color mycolor = Color.FromArgb(255, 217, 195);
+        private Form activeForm = null;
 
         public main()
         {
             InitializeComponent();
-            panel_img_home.Visible = true;
         }
-
         private void main_Load(object sender, EventArgs e)
         {
-
             flowLayoutPanel2.AutoScroll = false;
         }
+        //Setup resize panel
+        private void panel_pro_SizeChanged(object sender, EventArgs e)
+        {
+            panel_pro.AutoSize = true;
+
+        }
+        private void panel2_SizeChanged(object sender, EventArgs e)
+        {
+            panel2.AutoSize = true;
+        }
+        private void panel_payment_SizeChanged(object sender, EventArgs e)
+        {
+            panel_payment.AutoSize = true;
+            panel5.AutoSize = true;
+            panel3.AutoSize = true;
+        }
+        private void main_SizeChanged(object sender, EventArgs e)
+        {
+            panel_main.AutoSize = true;
+        }
+
 
         private void LoadProducts(string categoryName)
         {
-            panel_img_home.Visible = false;
             flowLayoutPanel2.AutoScroll = true;
             flowLayoutPanel2.Controls.Clear();
 
@@ -93,9 +111,25 @@ namespace ye
         }
         private void btn_homePage_Click(object sender, EventArgs e)
         {
-            panel_img_home.Visible = true;
+            pictureBox1.Visible = true;
+            // Đảm bảo panel_img_home nằm trên cùng
+            pictureBox1.BringToFront();
+            panel_pro.Visible = false;
         }
 
+        private void openChildForm(Form childForm)
+        {
+            if (activeForm != null)
+                activeForm.Close();
+            activeForm = childForm;
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+            panel_pro.Controls.Add(childForm);
+            panel_pro.Tag = childForm;
+            childForm.BringToFront();
+            childForm.Show();
+        }
 
         private void DisplaySearchResults(List<Product> searchResults)
         {
@@ -140,7 +174,6 @@ namespace ye
         {
             panel_payment.Visible = true;
         }
-
         private bool isHeaderAdded = false;
         private void SetupListView()
         {
@@ -148,9 +181,9 @@ namespace ye
             listViewMonAn.MultiSelect = false;
             if (!isHeaderAdded)
             {
-                listViewMonAn.Columns.Add("Tên món ăn", 180).TextAlign = HorizontalAlignment.Left;
-                listViewMonAn.Columns.Add("Số lượng", 55).TextAlign = HorizontalAlignment.Left;
-                listViewMonAn.Columns.Add("Thành tiền", 83).TextAlign = HorizontalAlignment.Left;
+                listViewMonAn.Columns.Add("Tên món ăn", 190).TextAlign = HorizontalAlignment.Left;
+                listViewMonAn.Columns.Add("Số lượng", 85).TextAlign = HorizontalAlignment.Left;
+                listViewMonAn.Columns.Add("Thành tiền", 125).TextAlign = HorizontalAlignment.Left;
                 isHeaderAdded = true;
             }
 
@@ -159,7 +192,6 @@ namespace ye
                 listViewMonAn.Columns["Tên món ăn"].AutoResize(ColumnHeaderAutoResizeStyle.None);
             }
         }
-
         private void AddMonAnToCart(Payment monAn)
         {
             if (!isHeaderAdded)
@@ -214,7 +246,6 @@ namespace ye
             txtTongGia.Text = total.ToString("N3") + " VNĐ";
 
         }
-
         private void button_delete_all_Click(object sender, EventArgs e)
         {
             listViewMonAn.Items.Clear();
@@ -236,5 +267,12 @@ namespace ye
                 MessageBox.Show("Vui lòng chọn một mục để xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void btn_book_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+
     }
 }
