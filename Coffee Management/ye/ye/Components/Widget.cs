@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ye.Model;
+using ye.DTO;
 using System.IO;
 
 namespace ye
@@ -27,7 +27,6 @@ namespace ye
         }
         public Product ProductInfo { get; private set; }
         public delegate void MonAnEventHandler(Payment monAn);
-        public event MonAnEventHandler Wdg_MonAnAdded;
         private int current_value = 0;
         public Widget()
         {
@@ -89,7 +88,6 @@ namespace ye
         public event EventHandler<AddToCartEventArgs> AddToCartClicked;
         private void btn_add_to_cart_Click(object sender, EventArgs e)
         {
-            // Lấy thông tin đối tượng món ăn từ widget
             Payment monAn = new Payment
             {
                 TEN_MON = ProductInfo.TEN_MON,
@@ -98,6 +96,7 @@ namespace ye
             };
             AddToCartClicked?.Invoke(this, new AddToCartEventArgs(monAn));
             label_count.Text = "0";
+            current_value = 0;
 
         }
     }

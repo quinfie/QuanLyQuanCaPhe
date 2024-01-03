@@ -44,19 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAL\Menu_Coffee.cs" />
+    <Compile Include="DAO\Connect.cs" />
+    <Compile Include="DAO\LoginDAO.cs" />
+    <Compile Include="DAO\Menu.cs" />
+    <Compile Include="DAO\PaymentDAO.cs" />
+    <Compile Include="DAO\TableDAO.cs" />
+    <Compile Include="DAO\UserDAO.cs" />
+    <Compile Include="DTO\Detail_Bill.cs" />
+    <Compile Include="DTO\LoginDTO.cs" />
+    <Compile Include="DTO\Table.cs" />
+    <Compile Include="DTO\User.cs" />
     <Compile Include="GUI\Booking.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\Booking.Designer.cs">
       <DependentUpon>Booking.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\DBConnect.cs" />
-    <Compile Include="GUI\frmDatBan.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\frmDatBan.Designer.cs">
-      <DependentUpon>frmDatBan.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Login.cs">
       <SubType>Form</SubType>
@@ -70,14 +72,14 @@
     <Compile Include="GUI\main.Designer.cs">
       <DependentUpon>main.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Tempcs.cs">
+    <Compile Include="DTO\Payment.cs" />
+    <Compile Include="DTO\Product.cs" />
+    <Compile Include="GUI\Slide_Show_Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Tempcs.Designer.cs">
-      <DependentUpon>Tempcs.cs</DependentUpon>
+    <Compile Include="GUI\Slide_Show_Main.Designer.cs">
+      <DependentUpon>Slide_Show_Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\Payment.cs" />
-    <Compile Include="Model\Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Components\Widget.cs">
@@ -89,17 +91,14 @@
     <EmbeddedResource Include="GUI\Booking.resx">
       <DependentUpon>Booking.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\frmDatBan.resx">
-      <DependentUpon>frmDatBan.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\main.resx">
       <DependentUpon>main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Tempcs.resx">
-      <DependentUpon>Tempcs.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\Slide_Show_Main.resx">
+      <DependentUpon>Slide_Show_Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -164,7 +163,9 @@
     <Content Include="Image\cpm.png" />
     <Content Include="Image\cps.png" />
     <Content Include="Image\cpst.png" />
+    <Content Include="Image\Drowning in salted coffee.png" />
     <Content Include="Image\Epresso.png" />
+    <Content Include="Image\Fatcaron.png" />
     <Content Include="Image\FlatWhite.png" />
     <Content Include="Image\Glazed Coconut Donuts.png" />
     <Content Include="Image\green tea macarons.png" />
@@ -182,6 +183,7 @@
     <Content Include="Image\olong.png" />
     <Content Include="Image\Oreo Macarons.png" />
     <Content Include="Image\peach.png" />
+    <Content Include="Image\picture-head.png" />
     <Content Include="Image\pina colada.png" />
     <Content Include="Image\pumpkin pie.png" />
     <Content Include="Image\Red velvet donuts.png" />
@@ -190,16 +192,19 @@
     <Content Include="Image\Southern Strawberry Iced Sweet Tea.png" />
     <Content Include="Image\Strawberry Cheesecake Macaron.png" />
     <Content Include="Image\strawberry.png" />
+    <Content Include="Image\sì mút thi.png" />
+    <Content Include="Image\tea.png" />
     <Content Include="Image\Triple Chocolate Donuts.png" />
     <Content Include="Image\Turmeric Lemon Coconut Donuts.png" />
     <Content Include="Image\Vegan Blueberry Donuts.png" />
     <Content Include="Image\Vegan chai latte donuts with maple glaze.png" />
-    <Content Include="Slide_Show\Drowning in salted coffee.png" />
-    <Content Include="Slide_Show\Fatcaron.png" />
-    <Content Include="Slide_Show\picture-head.png" />
-    <Content Include="Slide_Show\sì mút thi.png" />
-    <Content Include="Slide_Show\tea.png" />
-    <Content Include="Slide_Show\đô nút.png" />
+    <Content Include="Image\đô nút.png" />
+    <EmbeddedResource Include="Slide_Show\Drowning in salted coffee.png" />
+    <EmbeddedResource Include="Slide_Show\Fatcaron.png" />
+    <EmbeddedResource Include="Slide_Show\picture-head.png" />
+    <EmbeddedResource Include="Slide_Show\sì mút thi.png" />
+    <EmbeddedResource Include="Slide_Show\tea.png" />
+    <EmbeddedResource Include="Slide_Show\đô nút.png" />
     <None Include="Resources\tea.png" />
     <None Include="Resources\sì mút thi.png" />
     <None Include="Resources\picture-head.png" />

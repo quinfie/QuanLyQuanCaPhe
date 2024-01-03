@@ -1,4 +1,4 @@
-﻿namespace ye
+﻿namespace ye.GUI
 {
     partial class Login
     {
