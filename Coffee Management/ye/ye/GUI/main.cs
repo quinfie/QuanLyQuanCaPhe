@@ -9,17 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ye.DAL;
-using ye.Model;
+using ye.DAO;
+using ye.GUI;
+using ye.DTO;
 
-namespace ye
+namespace ye.GUI
 {
     public partial class main : Form
     {
-        Menu_Coffee menu = new Menu_Coffee();
+        private Menu_Coffee menu = new Menu_Coffee();
+        private PaymentDAO paymentDAO = new PaymentDAO();
         Color mycolor = Color.FromArgb(255, 217, 195);
         private Form activeForm = null;
-
+        //======================================================================
         public main()
         {
             InitializeComponent();
@@ -27,29 +29,10 @@ namespace ye
         private void main_Load(object sender, EventArgs e)
         {
             flowLayoutPanel2.AutoScroll = false;
+            Slide_Show_Main sl = new Slide_Show_Main();
+            openChildForm_Home(sl);
         }
-        //Setup resize panel
-        private void panel_pro_SizeChanged(object sender, EventArgs e)
-        {
-            panel_pro.AutoSize = true;
-
-        }
-        private void panel2_SizeChanged(object sender, EventArgs e)
-        {
-            panel2.AutoSize = true;
-        }
-        private void panel_payment_SizeChanged(object sender, EventArgs e)
-        {
-            panel_payment.AutoSize = true;
-            panel5.AutoSize = true;
-            panel3.AutoSize = true;
-        }
-        private void main_SizeChanged(object sender, EventArgs e)
-        {
-            panel_main.AutoSize = true;
-        }
-
-
+        //Menu 
         private void LoadProducts(string categoryName)
         {
             flowLayoutPanel2.AutoScroll = true;
@@ -75,10 +58,6 @@ namespace ye
                 flowLayoutPanel2.Controls.Add(thucDonWidget);
             }
         }
-        private void btn_menu_Click(object sender, EventArgs e)
-        {
-            LoadProducts("All");
-        }
         private void btn_coffee_Click(object sender, EventArgs e)
         {
             LoadProducts(btn_coffee.Text);
@@ -103,34 +82,8 @@ namespace ye
         {
             LoadProducts(btn_donuts.Text);
         }
-
-
-        private void btn_logOut_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-        private void btn_homePage_Click(object sender, EventArgs e)
-        {
-            pictureBox1.Visible = true;
-            // Đảm bảo panel_img_home nằm trên cùng
-            pictureBox1.BringToFront();
-            panel_pro.Visible = false;
-        }
-
-        private void openChildForm(Form childForm)
-        {
-            if (activeForm != null)
-                activeForm.Close();
-            activeForm = childForm;
-            childForm.TopLevel = false;
-            childForm.FormBorderStyle = FormBorderStyle.None;
-            childForm.Dock = DockStyle.Fill;
-            panel_pro.Controls.Add(childForm);
-            panel_pro.Tag = childForm;
-            childForm.BringToFront();
-            childForm.Show();
-        }
-
+        //======================================================================
+        //Search Top
         private void DisplaySearchResults(List<Product> searchResults)
         {
             flowLayoutPanel2.Controls.Clear();
@@ -163,16 +116,94 @@ namespace ye
                 MessageBox.Show("Vui lòng nhập từ khóa tìm kiếm.");
             }
         }
+        //======================================================================
+        //Button Excute Sidebar
+        private void openChildForm(Form childForm, Control parentControl)
+        {
+            if (activeForm != null)
+                activeForm.Close();
 
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+            parentControl.Controls.Add(childForm);
+            activeForm = childForm;
+            childForm.BringToFront();
+            childForm.Show();
+        }
+        private void openChildForm_Home(Form childForm)
+        {
+            if (activeForm != null)
+                activeForm.Close();
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+            panel_main.Controls.Add(childForm);
+            activeForm = childForm;
+            childForm.BringToFront();
+            childForm.Show();
+        }
+        private void CloseMainFlowLayoutPanel()
+        {
+            if (flowLayoutPanel2.Controls.Count > 0)
+            {
+                flowLayoutPanel2.Controls.Clear();
+            }
+        }
 
+        private void btn_menu_Click(object sender, EventArgs e)
+        {
+            if (activeForm is Slide_Show_Main)
+                activeForm.Close();
+            LoadProducts("All");
+        }
+        private void btn_book_Click(object sender, EventArgs e)
+        {
+            CloseMainFlowLayoutPanel();
+            if (activeForm is Slide_Show_Main)
+                activeForm.Close();
+            Booking bk = new Booking();
+            openChildForm(bk, flowLayoutPanel2);
+        }
+        private void btn_logOut_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn thoát không?", "Xác nhận thoát",
+                                                  MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                this.Close();
+                Login lg = new Login();
+                lg.Show();
+            }
+        }
+        private void btn_homePage_Click(object sender, EventArgs e)
+        {
+            Slide_Show_Main sl = new Slide_Show_Main();
+            openChildForm_Home(sl);
+        }
+
+        private bool isPanelVisible = false;
+        private void btn_payment_Click(object sender, EventArgs e)
+        {
+            LoadNguoiDungToComboBox();
+            if (isPanelVisible)
+            {
+                panel_payment.Visible = false;
+            }
+            else
+            {
+                panel_payment.Visible = true;
+            }
+            isPanelVisible = !isPanelVisible;
+            if (activeForm is Slide_Show_Main)
+                activeForm.Close();
+        }
+        //======================================================================
+        //Payment
         private void ThucDonWidget_AddToCartClicked(object sender, Widget.AddToCartEventArgs e)
         {
             Payment monAn = e.MonAn;
             AddMonAnToCart(monAn);
-        }
-        private void btn_payment_Click(object sender, EventArgs e)
-        {
-            panel_payment.Visible = true;
         }
         private bool isHeaderAdded = false;
         private void SetupListView()
@@ -203,32 +234,53 @@ namespace ye
             string gia = monAn.GIA.ToString("N0");
             string soLuong = monAn.SO_LUONG.ToString();
 
-            string giaThanh = (monAn.GIA * monAn.SO_LUONG).ToString("N0");
+            ListViewItem existingItem = FindExistingItem(tenMonAn);
 
-            ListViewItem item = new ListViewItem(new string[] { "", soLuong, giaThanh + " VNĐ" });
-
-            Font itemFont = new Font("Arial", 12);
-            item.Font = itemFont;
-
-            ImageList imageList = new ImageList();
-            imageList.ImageSize = new Size(1, 40);
-            listViewMonAn.SmallImageList = imageList;
-
-            item.UseItemStyleForSubItems = false;
-            item.SubItems[0].Font = itemFont;
-            item.SubItems[0].Text = tenMonAn.Replace("\n", Environment.NewLine);
-
-            listViewMonAn.Columns[0].TextAlign = HorizontalAlignment.Left;
-            listViewMonAn.Columns[0].Width = Math.Max(listViewMonAn.Columns[0].Width, 100);
-
-            // Thêm item vào ListView
-            listViewMonAn.Items.Add(item);
-
-            if (listViewMonAn.Items.Count > 5)
+            if (existingItem != null)
             {
-                listViewMonAn.TopItem = listViewMonAn.Items[listViewMonAn.Items.Count - 1];
+                // Món ăn đã tồn tại trong ListView, tăng thêm số lượng
+                int existingQuantity = int.Parse(existingItem.SubItems[1].Text);
+                existingQuantity += monAn.SO_LUONG;
+                existingItem.SubItems[1].Text = existingQuantity.ToString();
             }
+            else
+            {
+                // Món ăn chưa tồn tại trong ListView, thêm mới
+                string giaThanh = (monAn.GIA * monAn.SO_LUONG).ToString("N0");
+
+                ListViewItem item = new ListViewItem(new string[] { "", soLuong, giaThanh + " VNĐ" });
+
+                Font itemFont = new Font("Arial", 12);
+                item.Font = itemFont;
+
+                item.UseItemStyleForSubItems = false;
+                item.SubItems[0].Font = itemFont;
+                item.SubItems[0].Text = tenMonAn.Replace("\n", Environment.NewLine);
+
+                listViewMonAn.Columns[0].TextAlign = HorizontalAlignment.Left;
+                listViewMonAn.Columns[0].Width = Math.Max(listViewMonAn.Columns[0].Width, 100);
+
+                // Thêm item vào ListView
+                listViewMonAn.Items.Add(item);
+
+                if (listViewMonAn.Items.Count > 5)
+                {
+                    listViewMonAn.TopItem = listViewMonAn.Items[listViewMonAn.Items.Count - 1];
+                }
+            }
+
             UpdateTotal();
+        }
+        private ListViewItem FindExistingItem(string tenMonAn)
+        {
+            foreach (ListViewItem item in listViewMonAn.Items)
+            {
+                if (item.SubItems[0].Text == tenMonAn)
+                {
+                    return item;
+                }
+            }
+            return null;
         }
         private void UpdateTotal()
         {
@@ -267,12 +319,47 @@ namespace ye
                 MessageBox.Show("Vui lòng chọn một mục để xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-        private void btn_book_Click(object sender, EventArgs e)
+        private void button_payment_Click(object sender, EventArgs e)
         {
-            
+            double THANH_TIEN;
+            if (TryParseNumber(txtTongGia.Text, out THANH_TIEN))
+            {
+                SavePaymentDetails(THANH_TIEN);
+            }
+            else
+            {
+                MessageBox.Show("Giá trị không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            listViewMonAn.Items.Clear();
+            txtTongGia.Clear();
+        }
+        private bool TryParseNumber(string input, out double result)
+        {
+            string numberStr = new string(input.Where(char.IsDigit).ToArray());
+            return double.TryParse(numberStr, out result);
+        }
+        private void SavePaymentDetails(double thanhTien)
+        {
+            int maHoaDon = paymentDAO.InsertHoaDon(thanhTien);
+            foreach (ListViewItem item in listViewMonAn.Items)
+            {
+                string tenMonAn = item.SubItems[0].Text;
+                int soLuong = int.Parse(item.SubItems[1].Text);
+                int maMon = menu.GetMaMonByTenMon(tenMonAn);
+                paymentDAO.InsertChiTietHoaDon(maHoaDon, maMon, soLuong);
+            }
+            MessageBox.Show("Đã lưu thông tin hóa đơn và chi tiết hóa đơn", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void LoadNguoiDungToComboBox()
+        {
+            UserDAO userDAO = new UserDAO();
+            List<User> nguoiDungList = userDAO.GetNguoiDungList();
 
+            // Thiết lập nguồn dữ liệu cho ComboBox
+            cb_nguoi_dung.DisplayMember = "TenNguoiDung";
+            cb_nguoi_dung.ValueMember = "MaNguoiDung";
+            cb_nguoi_dung.DataSource = nguoiDungList;
+        }
     }
 }

@@ -22,19 +22,11 @@ CREATE TABLE NGUOI_DUNG
 	SDT VARCHAR(10)
 )
 -------------------------------------------------------------------------------------------
-CREATE TABLE KHACH_HANG
-(
-	MA_KHACH_HANG VARCHAR(10) PRIMARY KEY,
-	TEN_KHACH_HANG NVARCHAR(40),
-	GIOI_TINH NVARCHAR(3),
-	NGAY_SINH DATE,
-	SO_LAN_MUA_HANG INT DEFAULT 0
-)
--------------------------------------------------------------------------------------------
 CREATE TABLE BAN 
 --Thông tin vị trí số bàn xem có người đặt hay không
 (
-	MA_BAN INT PRIMARY KEY,
+	ID INT IDENTITY PRIMARY KEY,
+	MA_BAN INT,
 	TINH_TRANG_BAN NVARCHAR(100) NOT NULL
 )
 -------------------------------------------------------------------------------------------
@@ -48,37 +40,26 @@ CREATE TABLE THUC_DON
 (
 	MA_MON INT PRIMARY KEY,
 	TEN_MON NVARCHAR(50),
-	THANH_PHAN NVARCHAR(100),
+	THANH_PHAN NVARCHAR(MAX),
 	GIA INT,
 	HINH_ANH VARCHAR(100),
 	MA_DANH_MUC INT, 
 	FOREIGN KEY (MA_DANH_MUC) REFERENCES DANH_MUC(MA_DANH_MUC)
 )
 -------------------------------------------------------------------------------------------
-CREATE TABLE HOA_DON
-(
-	MA_HOA_DON INT PRIMARY KEY,
-	MA_KHACH_HANG VARCHAR(10) NOT NULL,
-	GIO_VAO DATETIME NOT NULL DEFAULT GETDATE(),
-	GIO_RA DATETIME NOT NULL,
-	TINH_TRANG_HD NVARCHAR(100) NOT NULL,
-	THANH_TIEN REAL,
-    MA_BAN INT,
-	NGUOI_PHU_TRACH VARCHAR(10) NOT NULL,
-	FOREIGN KEY (MA_KHACH_HANG) REFERENCES KHACH_HANG(MA_KHACH_HANG),
-	FOREIGN KEY (NGUOI_PHU_TRACH) REFERENCES NGUOI_DUNG(MA_NGUOI_DUNG),
-    FOREIGN KEY (MA_BAN) REFERENCES BAN(MA_BAN)
-)
+CREATE TABLE HOA_DON (
+    MA_HOA_DON INT IDENTITY PRIMARY KEY,
+    THANH_TIEN REAL
+);
 -------------------------------------------------------------------------------------------
-CREATE TABLE CHI_TIET_HOA_DON
-(
-	MA_HOA_DON INT NOT NULL,
-	MA_MON INT NOT NULL,
-	SO_LUONG INT NOT NULL DEFAULT 0,
-	PRIMARY KEY (MA_HOA_DON, MA_MON),
-	FOREIGN KEY (MA_HOA_DON) REFERENCES HOA_DON(MA_HOA_DON),
-	FOREIGN KEY (MA_MON) REFERENCES THUC_DON(MA_MON)
-)
+CREATE TABLE CHI_TIET_HOA_DON (
+    MA_HOA_DON INT NOT NULL,
+    MA_MON INT NOT NULL,
+    SO_LUONG INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (MA_HOA_DON, MA_MON),
+    FOREIGN KEY (MA_HOA_DON) REFERENCES HOA_DON(MA_HOA_DON),
+    FOREIGN KEY (MA_MON) REFERENCES THUC_DON(MA_MON)
+);
 --------------------------------------------------------INSERT DATA TO TABLE--------------------------------------------------------------
 SET DATEFORMAT DMY
 INSERT INTO NGUOI_DUNG (MA_NGUOI_DUNG, TEN_NGUOI_DUNG, GIOI_TINH, NGAY_SINH, CCCD, DIA_CHI, SDT) VALUES 
@@ -129,88 +110,64 @@ INSERT INTO THUC_DON VALUES
 ('22', 'Pina Colada Smoothie', 'Rum, cream of coconut, pineapple juice and frozen pineapple', 55000, 'pina colada.png', '3'),
 ('23', 'Pumpkin Pie Smoothie', 'Pumpkin puree, banana, yogurt vanilla, pumpkin pie spice, honey, whipped cream and milk', 60000, 'pumpkin pie.png', '3'),
 --=========================================================================================================================================
-('24', 'Carrot Cream Cheese Cookies',NULL, 45000, 'carrot cream cheese.png', '4'),
-('25', 'Chewy Ginger Molasses Cookies',NULL, 45000, 'Chewy Ginger Molasses Cookies.png', '4'),
-('26', 'Choco Chip Cookies',NULL, 45000, 'choc chip cookies.png', '4'),
-('27', 'Choco Mint',NULL, 45000, 'choco mint.png', '4'),
-('28', 'Chocolate Chip Cookies',NULL, 45000, 'chocolate chip cookies.png', '4'),
-('29', 'Chocolate Peanut Butter Cookies',NULL, 45000, 'Chocolate Peanut Butter Cookies.png', '4'),
-('30', 'Lemon Cookies',NULL, 45000, 'lemon.png', '4'),
-('31', 'Oatmeal Cookies',NULL, 45000, 'oatmeal cookies.png', '4'),
-('32', 'Redvelvet Cookies',NULL, 45000, 'redvelvet.png', '4'),
-('33', 'Strawberry Cookies',NULL, 45000, 'strawberry.png', '4'),
+('24', 'Carrot Cream Cheese Cookies','Carrot, Cream Cheese, Flour, Sugar, Butter, Egg, Baking Powder, Vanilla Extract, Salt, Cinnamon', 45000, 'Carrot_Cream_Cheese.png', '4'),
+('25', 'Chewy Ginger Molasses Cookies','Flour, Molasses, Sugar, Butter, Egg, Baking Soda, Ginger, Cinnamon, Cloves, Salt', 45000, 'Chewy_Ginger_Molasses_Cookies.png', '4'),
+('26', 'Choco Chip Cookies','Flour, Chocolate Chips, Butter, Brown Sugar, Sugar, Egg, Vanilla Extract, Baking Soda, Salt', 45000, 'Choc_Chip_Cookies.png', '4'),
+('27', 'Choco Mint','Flour, Chocolate Chips, Butter, Sugar, Egg, Mint Extract, Baking Soda, Salt', 45000, 'Choco_Mint.png', '4'),
+('28', 'Chocolate Chip Cookies','Flour, Chocolate Chips, Butter, Brown Sugar, Sugar, Egg, Vanilla Extract, Baking Soda, Salt', 45000, 'Chocolate_Chip_Cookies.png', '4'),
+('29', 'Chocolate Peanut Butter Cookies','Flour, Chocolate Chips, Peanut Butter, Butter, Sugar, Egg, Baking Soda, Salt', 45000, 'Chocolate_Peanut_Butter_Cookies.png', '4'),
+('30', 'Lemon Cookies','Flour, Lemon Zest, Lemon Juice, Butter, Sugar, Egg, Baking Powder, Salt', 45000, 'lemon_cookies.png', '4'),
+('31', 'Oatmeal Cookies','Oats, Flour, Butter, Brown Sugar, Sugar, Egg, Vanilla Extract, Baking Soda, Cinnamon, Salt', 45000, 'Oatmeal_Cookies.png', '4'),
+('32', 'Redvelvet Cookies','Flour, Cocoa Powder, Red Food Coloring, Butter, Sugar, Egg, Vanilla Extract, Baking Powder, Salt', 45000, 'Redvelvet_Cookies.png', '4'),
+('33', 'Strawberry Cookies','Flour, Strawberries, Butter, Sugar, Egg, Baking Powder, Vanilla Extract, Salt', 45000, 'Strawberry_Cookies.png', '4'),
 --=========================================================================================================================================
-('34', 'Blueberry Cheesecake Macarons',NULL, 30000, 'Blueberry Cheesecake Macarons.png', '5'),
-('35', 'Chocolate Macarons',NULL, 30000, 'Chocolate Macarons.png', '5'),
-('36', 'Chocolate Orange Macarons',NULL, 30000, 'Chocolate Orange Macarons.png', '5'),
-('37', 'Coconut Macarons',NULL, 30000, 'Coconut macarons.png', '5'),
-('38', 'Green Tea Macarons',NULL, 30000, 'green tea macarons.png', '5'),
-('39', 'Lavender Macarons',NULL, 30000, 'Lavender Macarons.png', '5'),
-('40', 'Oreo Macarons	',NULL, 30000, 'Oreo Macarons.png', '5'),
-('41', 'Salted Caramel Macarons',NULL, 30000, 'salted caramel macarons.png', '5'),
-('42', 'Strawberry Cheesecake Macaron',NULL, 30000, 'Strawberry Cheesecake Macaron.png', '5'),
+('34', 'Blueberry Cheesecake Macarons','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Cream Cheese, Blueberry Jam, Food Coloring', 30000, 'Blueberry_Cheesecake_Macarons.png', '5'),
+('35', 'Chocolate Macarons','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Cocoa Powder, Dark Chocolate, Butter, Cream', 30000, 'Chocolate_Macarons.png', '5'),
+('36', 'Chocolate Orange Macarons','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Cocoa Powder, Orange Zest, Dark Chocolate, Butter, Cream', 30000, 'Chocolate_Orange_Macarons.png', '5'),
+('37', 'Coconut Macarons','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Shredded Coconut, Coconut Extract', 30000, 'Coconut_Macarons.png', '5'),
+('38', 'Green Tea Macarons','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Matcha Powder', 30000, 'Green_Tea_Macarons.png', '5'),
+('39', 'Lavender Macarons','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Dried Lavender, Purple Food Coloring', 30000, 'Lavender_Macarons.png', '5'),
+('40', 'Oreo Macarons','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Oreo Cookies (filling removed)', 30000, 'Oreo_Macarons.png', '5'),
+('41', 'Salted Caramel Macarons','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Caramel Sauce, Sea Salt', 30000, 'Salted_Caramel_Macarons.png', '5'),
+('42', 'Strawberry Cheesecake Macaron','Almond Flour, Powdered Sugar, Egg Whites, Granulated Sugar, Cream Cheese, Strawberry Jam, Food Coloring', 30000, 'Strawberry_Cheesecake_Macaron.png', '5'),
 --=========================================================================================================================================
-('43', 'Baked Orange Donuts with Salted Caramel Glaze',NULL, 30000, 'Baked Orange Donuts with Salted Caramel Glaze.png', '6'),
-('44', 'Black Sesame Matcha Doughnuts',NULL, 30000, 'Black Sesame Matcha Doughnuts.png', '6'),
-('45', 'Cinnamon Spiced Doughnuts',NULL, 30000, 'Cinnamon Spiced Doughnuts.png', '6'),
-('46', 'Glazed Coconut Donuts',NULL, 30000, 'Glazed Coconut Donuts.png', '6'),
-('48', 'Red Velvet Donuts',NULL, 30000, 'Red velvet donuts.png', '6'),
-('49', 'Triple Chocolate Donuts',NULL, 30000, 'Triple Chocolate Donuts.png', '6'),
-('50', 'Turmeric Lemon Coconut Donuts',NULL, 30000, 'Turmeric Lemon Coconut Donuts.png', '6'),
-('51', 'Vegan Blueberry Donuts',NULL, 30000, 'Vegan Blueberry Donuts.png', '6'),
-('52', 'Vegan Chai Latte Donuts With Maple Glaze',NULL, 30000, 'Vegan chai latte donuts with maple glaze.png', '6')
-------------------------------------------------------------------------------------------- ( Chưa insert và xử lý )
+('43', 'Baked Orange Donuts with Salted Caramel Glaze','Flour, Baking Powder, Salt, Nutmeg, Orange Zest, Sugar, Butter, Egg, Milk, Vanilla Extract, Salted Caramel Sauce', 30000, 'Baked_Orange_Donuts_with_Salted_Caramel_Glaze.png', '6'),
+('44', 'Black Sesame Matcha Doughnuts','Flour, Baking Powder, Salt, Black Sesame Seeds, Matcha Powder, Sugar, Butter, Egg, Milk, Vanilla Extract', 30000, 'Black_Sesame_Matcha_Doughnuts.png', '6'),
+('45', 'Cinnamon Spiced Doughnuts','Flour, Baking Powder, Baking Soda, Cinnamon, Nutmeg, Sugar, Butter, Egg, Milk, Vanilla Extract', 30000, 'Cinnamon_Spiced_Doughnuts.png', '6'),
+('46', 'Glazed Coconut Donuts','Flour, Baking Powder, Salt, Coconut Milk, Shredded Coconut, Sugar, Butter, Egg, Vanilla Extract, Powdered Sugar', 30000, 'Glazed_Coconut_Donuts.png', '6'),
+('48', 'Red Velvet Donuts','Flour, Cocoa Powder, Baking Powder, Salt, Buttermilk, Red Food Coloring, Sugar, Butter, Egg, Vanilla Extract, Cream Cheese Frosting', 30000, 'Red_Velvet_Donuts.png', '6'),
+('49', 'Triple Chocolate Donuts','Flour, Cocoa Powder, Baking Powder, Salt, Sugar, Butter, Egg, Milk, Vanilla Extract, Chocolate Chips, Chocolate Glaze', 30000, 'Triple_Chocolate_Donuts.png', '6'),
+('50', 'Turmeric Lemon Coconut Donuts','Flour, Baking Powder, Salt, Turmeric, Lemon Zest, Coconut Milk, Sugar, Butter, Egg, Vanilla Extract, Shredded Coconut', 30000, 'Turmeric_Lemon_Coconut_Donuts.png', '6'),
+('51', 'Vegan Blueberry Donuts','Flour, Baking Powder, Baking Soda, Salt, Vegan Milk, Apple Cider Vinegar, Sugar, Vegetable Oil, Vanilla Extract, Blueberries (fresh or frozen)', 30000, 'Vegan_Blueberry_Donuts.png', '6'),
+('52', 'Vegan Chai Latte Donuts With Maple Glaze','Flour, Baking Powder, Baking Soda, Salt, Chai Spice Blend, Vegan Milk, Apple Cider Vinegar, Sugar, Vegetable Oil, Maple Glaze', 30000, 'Vegan_Chai_Latte_Donuts_With_Maple_Glaze.png', '6');
+select * from THUC_DON
+delete THUC_DON
+------------------------------------------------------------------------------------------- 
 INSERT INTO BAN VALUES
 (1,N'Trống'),
 (2,N'Trống'),
 (3,N'Trống'),
-(4,N'Đã đặt'),
+(4,N'Trống'),
 (5,N'Trống'),
-(6,N'Đã đặt'),
-(7,N'Đã đặt'),
+(6,N'Trống'),
+(7,N'Trống'),
 (8,N'Trống'),
-(9,N'Đã đặt'),
-(10,N'Đã đặt');
--------------------------------------------------------------------------------------------
-SET DATEFORMAT DMY
-INSERT INTO KHACH_HANG (MA_KHACH_HANG, TEN_KHACH_HANG, GIOI_TINH, NGAY_SINH, SO_LAN_MUA_HANG)
-VALUES
-('KH001', N'Nguyễn Văn A', N'Nam', '15-05-1990', 2),
-('KH002', N'Trần Thị B', N'Nữ', '22-08-1985', 5),
-('KH003', N'Lê Văn C', N'Nam', '10-12-1995', 1),
-('KH004', N'Phạm Thị D', N'Nữ', '25-03-1988', 3),
-('KH005', N'Hoàng Văn E', N'Nam', '18-07-1992', 4),
-('KH006', N'Nguyễn Thị F', N'Nữ', '30-09-1998', 1),
-('KH007', N'Trần Văn G', N'Nam', '05-11-1997', 2),
-('KH008', N'Lê Thị H', N'Nữ', '12-01-1994', 6),
-('KH009', N'Phan Văn I', N'Nam', '20-04-1993', 2),
-('KH010', N'Nguyễn Thị K', N'Nữ', '28-06-1996', 3);
--------------------------------------------------------------------------------------------
-SET DATEFORMAT DMY
-INSERT INTO HOA_DON (MA_HOA_DON, MA_KHACH_HANG, GIO_VAO, GIO_RA, TINH_TRANG_HD, THANH_TIEN, MA_BAN, NGUOI_PHU_TRACH)
-VALUES
-(1,'KH001', '2023-12-01 12:00:00', '2023-12-01 13:30:00', N'Hoàn thành', 150000, 1, 'ND0001'),
-(2,'KH002', '2023-12-02 15:30:00', '2023-12-02 17:00:00', N'Chưa thanh toán', 200000, 2, 'ND0002'),
-(3,'KH003', '2023-12-03 18:45:00', '2023-12-03 20:15:00', N'Đang chờ', 120000, 3, 'ND0003'),
-(4,'KH004', '2023-12-04 10:00:00', '2023-12-04 11:30:00', N'Hoàn thành', 180000, 4, 'ND0004'),
-(5,'KH005', '2023-12-05 14:45:00', '2023-12-05 16:00:00', N'Chưa thanh toán', 220000, 5, 'ND0005'),
-(6,'KH006', '2023-12-06 19:30:00', '2023-12-06 21:00:00', N'Đang chờ', 130000, 6, 'ND0001'),
-(7,'KH007', '2023-12-07 11:15:00', '2023-12-07 12:45:00', N'Hoàn thành', 160000, 7, 'ND0002'),
-(8,'KH008', '2023-12-08 16:30:00', '2023-12-08 18:00:00', N'Chưa thanh toán', 190000, 8, 'ND0003'),
-(9,'KH009', '2023-12-09 20:00:00', '2023-12-09 21:30:00', N'Đang chờ', 140000, 9, 'ND0004'),
-(10,'KH010', '2023-12-10 13:00:00', '2023-12-10 14:15:00', N'Hoàn thành', 200000, 10, 'ND0005');
--------------------------------------------------------------------------------------------
-INSERT INTO CHI_TIET_HOA_DON (MA_HOA_DON, MA_MON, COUNT) VALUES 
-(1, 2, 2),
-(2, 2, 1),
-(3, 3, 3),
-(4, 4, 2),
-(5, 5, 1),
-(6, 6, 3),
-(7, 7, 2),
-(8, 8, 1),
-(9, 9, 3),
-(10, 10, 2);
+(9,N'Trống'),
+(10,N'Trống'),
+(11,N'Trống'),
+(12,N'Trống'),
+(13,N'Trống'),
+(14,N'Trống'),
+(15,N'Trống'),
+(16,N'Trống'),
+(17,N'Trống'),
+(18,N'Trống'),
+(19,N'Trống'),
+(20,N'Trống'),
+(21,N'Trống'),
+(22,N'Trống'),
+(23,N'Trống'),
+(24,N'Trống');
 --------------------------------------------------------CONSTRAINT TABLE--------------------------------------------------------------
 ALTER TABLE TAI_KHOAN
 ADD CONSTRAINT FK_MND FOREIGN KEY (MA_NGUOI_DUNG) REFERENCES NGUOI_DUNG(MA_NGUOI_DUNG)
@@ -224,59 +181,46 @@ ALTER TABLE BAN
 ADD CONSTRAINT DF_TINH_TRANG_BAN
 DEFAULT 'Trống' FOR TINH_TRANG_BAN;
 ----------------------------------------------------------------------------
---Cập nhật số lượng của món ăn trong thực đơn sau mỗi lần có sự thay đổi.
-CREATE TRIGGER TR_CHI_TIET_HOA_DON_COUNT
-ON CHI_TIET_HOA_DON
-AFTER INSERT, UPDATE
-AS
-BEGIN
-    UPDATE cthd
-    SET SO_LUONG = cthd.SO_LUONG + i.SO_LUONG
-    FROM CHI_TIET_HOA_DON cthd
-    INNER JOIN inserted i ON cthd.MA_MON = i.MA_MON AND cthd.MA_HOA_DON = i.MA_HOA_DON
-END;
-----------------------------------------------------------------------------
---Cập nhật trạng thái của bàn sau khi có sự thay đổi.
-CREATE TRIGGER TR_BAN_TINH_TRANG
-ON BAN
-AFTER INSERT, UPDATE
-AS
-BEGIN
-    UPDATE BAN
-    SET TINH_TRANG_BAN = 'Có người đặt'
-    FROM BAN b
-    INNER JOIN inserted i ON b.MA_BAN = i.MA_BAN
-END;
-----------------------------------------------------------------------------
--- trigger tự động tính toán và cập nhật trường "THANH_TIEN" trong bảng HOA_DON
-CREATE TRIGGER tr_Calculate_ThanhTien
+CREATE TRIGGER trg_AfterChange_ChiTietHoaDon
 ON CHI_TIET_HOA_DON
 AFTER INSERT, UPDATE, DELETE
 AS
 BEGIN
-    SET NOCOUNT ON;
+    DECLARE @MaHoaDon INT;
 
-    -- Update THANH_TIEN for affected HOA_DON records after INSERT or UPDATE in CHI_TIET_HOA_DON
+    IF (SELECT COUNT(*) FROM inserted) > 0
+    BEGIN
+        -- Lấy MA_HOA_DON từ bản ghi được thêm hoặc cập nhật
+        SELECT @MaHoaDon = MA_HOA_DON
+        FROM inserted;
+    END
+    ELSE
+    BEGIN
+        -- Lấy MA_HOA_DON từ bản ghi bị xóa
+        SELECT @MaHoaDon = MA_HOA_DON
+        FROM deleted;
+    END
+
+    -- Cập nhật THANH_TIEN trong bảng HOA_DON dựa trên các bản ghi mới hoặc cũ
     UPDATE HOA_DON
     SET THANH_TIEN = (
-        SELECT SUM(ISNULL(TD.GIA, 0) * ISNULL(CTHD.SO_LUONG, 0))
-        FROM CHI_TIET_HOA_DON CTHD
-        JOIN THUC_DON TD ON CTHD.MA_MON = TD.MA_MON
-        WHERE CTHD.MA_HOA_DON = HOA_DON.MA_HOA_DON
+        SELECT SUM(chi_tiet.SO_LUONG * thuc_don.GIA) 
+        FROM CHI_TIET_HOA_DON chi_tiet
+        INNER JOIN THUC_DON thuc_don ON chi_tiet.MA_MON = thuc_don.MA_MON
+        WHERE chi_tiet.MA_HOA_DON = @MaHoaDon
     )
-    WHERE HOA_DON.MA_HOA_DON IN (SELECT DISTINCT MA_HOA_DON FROM inserted);
-
-    -- Handle DELETE in CHI_TIET_HOA_DON
-    UPDATE HOA_DON
-    SET THANH_TIEN = (
-        SELECT SUM(ISNULL(TD.GIA, 0) * ISNULL(CTHD.SO_LUONG, 0))
-        FROM CHI_TIET_HOA_DON CTHD
-        JOIN THUC_DON TD ON CTHD.MA_MON = TD.MA_MON
-        WHERE CTHD.MA_HOA_DON = HOA_DON.MA_HOA_DON
-    )
-    WHERE HOA_DON.MA_HOA_DON IN (SELECT DISTINCT MA_HOA_DON FROM deleted);
+    WHERE MA_HOA_DON = @MaHoaDon;
 END;
+----------------------------------------------------------------------------
+CREATE PROC GET_TABLE_LIST
+AS SELECT * FROM BAN
+GO
+EXEC GET_TABLE_LIST
+--------------------------------------------------------Test Data--------------------------------------------------------------
+select * from BAN
+select * from HOA_DON
+select * from CHI_TIET_HOA_DON
 
-
-
-
+delete CHI_TIET_HOA_DON
+delete HOA_DON
+DBCC CHECKIDENT('HOA_DON', RESEED, 0)
