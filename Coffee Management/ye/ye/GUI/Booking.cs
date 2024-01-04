@@ -59,6 +59,7 @@ namespace ye.GUI
                     tableDAO.UpdateTableStatus(tableID, "Trống");
                     flp_table.Controls.Clear();
                     LoadTableList();
+                    MessageBox.Show("Thay Đổi Tình Trạng Bàn Thành Công !");
                 }
                 else
                 {
@@ -69,6 +70,7 @@ namespace ye.GUI
                         flp_table.Controls.Clear();
                         LoadTableList();
                         selectedTableID = 0;
+                        MessageBox.Show("Thay Đổi Tình Trạng Bàn Thành Công !");
                     }
                 }
 
