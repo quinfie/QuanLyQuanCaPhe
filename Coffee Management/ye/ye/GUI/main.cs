@@ -302,6 +302,7 @@ namespace ye.GUI
         {
             listViewMonAn.Items.Clear();
             UpdateTotal();
+            MessageBox.Show("Đã xóa món thành công !", "Thông báo", MessageBoxButtons.OK);
         }
         private void button_delete_select_Click(object sender, EventArgs e)
         {
@@ -310,6 +311,7 @@ namespace ye.GUI
                 foreach (ListViewItem selectedItem in listViewMonAn.SelectedItems)
                 {
                     listViewMonAn.Items.Remove(selectedItem);
+                    MessageBox.Show("Đã xóa món thành công !", "Thông báo", MessageBoxButtons.OK);
                 }
 
                 UpdateTotal();
