@@ -44,3 +44,4 @@ E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Deb
 E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.GUI.Slide_Show_Main.resources
 E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.GUI.main.resources
 E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.GUI.Login.resources
+E:\Công Nghệ .Net\QuanLyCaPhe\QuanLyQuanCaPhe\Coffee Management\ye\ye\obj\Debug\ye.csproj.AssemblyReference.cache

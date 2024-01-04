@@ -14,7 +14,7 @@ namespace ye
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new main());
+            Application.Run(new Login());
         }
     }
 }
